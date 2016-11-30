@@ -1,0 +1,61 @@
+<?php
+
+function salon_menu() {
+    $items['salon'] = array(
+        'title' => 'Stylists',
+        'page callback' => 'stylists_list',
+        'access callback' => TRUE,
+        'type' => MENU_NORMAL_ITEM,
+    );
+    $items['salon/new_stylist'] = array(
+        'title' => 'Add a Stylist',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('new_stylist_form'),
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+    );
+    return $items;
+}
+
+
+function stylists_list() {
+    $query = db_select('salon_stylists', 's')
+    ->fields('s', array('id', 'name'));
+    $result = '<ul class="list-group"><li class="list-group-item active">Our Stylin\' Team!</li>';
+    $stylists = $query->execute();
+    foreach ($stylists as $stylist) {
+      $result = $result . '<li class="list-group-item">' . $stylist->id . '. ' . $stylist->name . '</li>';
+    }
+    $result = $result . '</ul>';
+    return $result;
+}
+
+function new_stylist_form() {
+    $form['name'] = array(
+        '#title' => 'Name of Stylist',
+        '#type' => 'textfield',
+        '#description' => t('Please enter the Stylist\'s name.'),
+    );
+
+    $form['submit'] = array(
+        '#type' => 'submit',
+        '#value' => 'Do It!',
+    );
+
+    return $form;
+}
+
+function new_stylist_form_submit($form, &$form_state) {
+
+  $stylist = new stdClass();
+  $stylist->name = $form_state['values']['name'];
+
+    $id = db_insert('salon_stylists')
+    ->fields(array(
+        'name' => $stylist->name,
+    ))
+    ->execute();
+    watchdog('sleetmute', "NID  = " . $id);
+
+    $form_state['redirect'] = 'salon';
+  }

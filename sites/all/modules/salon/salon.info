@@ -1,0 +1,5 @@
+name = Salon
+description = Stylists and clients of a hair salon.
+package = Epicodus Examples
+core = 7.x
+files[] = salon.module
