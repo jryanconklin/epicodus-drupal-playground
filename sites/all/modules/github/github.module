@@ -1,0 +1,32 @@
+<?php
+
+function github_menu() {
+    $items['github'] = array(
+        'title' => 'GitHub User Profile',
+        'page callback' => 'github_data',
+        'access callback' => TRUE,
+        'type' => MENU_NORMAL_ITEM,
+    );
+    return $items;
+}
+
+
+function github_data() {
+  $data = array(
+    // 'key1' => $value1,
+    // 'key2' => $value2,
+  );
+
+  $full_url = url('https://api.github.com/users/freeformpdx', array('query' => $data));
+
+  $options = array(
+    'method' => 'GET',
+    'timeout' => 15,
+    'headers' => array('Content-Type' => 'application/x-www-form-urlencoded'),
+  );
+
+  $result = drupal_http_request($full_url, $options);
+  $result = drupal_json_decode($result->data);
+
+  return var_dump($result);
+}

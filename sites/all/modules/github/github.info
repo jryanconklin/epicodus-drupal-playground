@@ -1,0 +1,5 @@
+name = GitHub
+description = Makes API calls to GitHub.
+package = Epicodus Examples
+core = 7.x
+files[] = github.module
